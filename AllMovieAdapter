@@ -1,0 +1,54 @@
+package com.example.bingebuddybca.adapter
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.bingebuddybca.activities.HomeActivity
+import com.example.bingebuddybca.activities.MovieDetail1Activity
+import com.example.bingebuddybca.databinding.RvMovieSearchItemRowBinding
+import com.example.bingebuddybca.model.Movies
+import com.example.bingebuddybca.util.UtilObject
+class AllMovieAdapter (var context: Context, var allMovieList: List<Movies>)
+    : RecyclerView.Adapter<AllMovieAdapter.AllMovieViewHolder>(){
+
+    class AllMovieViewHolder(binding: RvMovieSearchItemRowBinding)
+        : RecyclerView.ViewHolder(binding.root){
+            var binding: RvMovieSearchItemRowBinding = binding
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllMovieViewHolder {
+        val binding: RvMovieSearchItemRowBinding = RvMovieSearchItemRowBinding
+            .inflate(LayoutInflater.from(context),parent,false)
+        return AllMovieViewHolder(binding)
+    }
+
+    override fun getItemCount(): Int {
+        return  allMovieList.size
+    }
+
+    override fun onBindViewHolder(holder: AllMovieViewHolder, position: Int) {
+        val allMovie = allMovieList[position]
+        holder.binding.tvMovieName.text = allMovie.movieName
+        holder.binding.tvMovieYear.text = allMovie.movieYear
+        holder.binding.tvMovieCategory.text = allMovie.categoryType
+        holder.binding.tvMovieRating.text = allMovie.movieRating
+        holder.binding.tvMovieHr.text = allMovie.movieHr
+        if (context !is HomeActivity) {
+            val drawableRes = context.resources.getIdentifier(allMovie.movieDrawableName,
+                "drawable",context.packageName)
+            holder.binding.ivMovieImage.setImageResource(drawableRes)
+        }
+        else{
+            holder.binding.ivMovieImage.visibility = View.GONE
+        }
+        holder.binding.cvAllMovieItemRow.setOnClickListener{
+            UtilObject.screenNavigationWithDataPassing(context,
+               MovieDetail1Activity::class.java,
+                "movieDetails", allMovie
+            )
+        }
+    }
+}
